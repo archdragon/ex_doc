@@ -6,6 +6,8 @@
 import $ from 'jquery'
 import {search} from './search'
 import * as helpers from './helpers'
+import {toggleSidebar} from './sidebar'
+import {toggleNightMode} from './night'
 
 import sidebarItemsTemplate from './templates/sidebar-items.handlebars'
 
@@ -19,8 +21,26 @@ var SIDEBAR_TYPES = [
   '#tasks-list',
   '#search-list'
 ]
+var SEARCH_INPUT = $('#search-list')
 var SIDEBAR_NAV = $('.sidebar-listNav')
 var CONTENT = $('.content')
+var KEYBOARD_SHORTCUTS = {
+  n: {
+    description: 'Toggle night mode',
+    action: toggleNightMode
+  },
+  s: {
+    description: 'Search',
+    action: (event) => {
+      focusSearchInput()
+      event.preventDefault()
+    }
+  },
+  c: {
+    description: 'Toggle sidebar',
+    action: toggleSidebar
+  }
+}
 
 function setupSelected (id) {
   SIDEBAR_TYPES.forEach(function (element) {
@@ -83,11 +103,44 @@ function createHandler (name) {
   }
 }
 
+function addKeyboardShortuctsListeners () {
+  $(document).on('keydown', function (e) {
+    var tagName = e.target.tagName.toLowerCase()
+    var inputElements = ['input', 'textarea']
+
+    if (inputElements.indexOf(tagName) >= 0) { return true }
+
+    var character = String.fromCharCode(e.which).toLowerCase()
+    var shortcut = KEYBOARD_SHORTCUTS[character]
+    if (shortcut) {
+      shortcut.action(event)
+    }
+  })
+}
+
+function hideAutocomplete () {
+
+}
+
+function showAutocomplete () {
+
+}
+
+function updateAutocomplete (searchTerm) {
+  if (!searchTerm) {
+    hideAutocomplete();
+  } else {
+    showAutocomplete();
+  }
+}
+
 function addEventListeners () {
   SIDEBAR_NAV.on('click', '#extras-list', createHandler('extras'))
   SIDEBAR_NAV.on('click', '#modules-list', createHandler('modules'))
   SIDEBAR_NAV.on('click', '#exceptions-list', createHandler('exceptions'))
   SIDEBAR_NAV.on('click', '#tasks-list', createHandler('tasks'))
+
+  addKeyboardShortuctsListeners()
 
   $('.sidebar-search input').on('keydown', function (e) {
     if (e.keyCode === 27) { // escape key
@@ -96,6 +149,8 @@ function addEventListeners () {
       $(this).parent().attr('target', '_blank').submit().removeAttr('')
       e.preventDefault()
     }
+
+    updateAutocomplete($(this).val())
   })
 
   var pathname = window.location.pathname
@@ -144,6 +199,10 @@ function fixLinks () {
  */
 function fixSpacebar () {
   CONTENT.attr('tabindex', -1).focus()
+}
+
+function focusSearchInput() {
+  SEARCH_INPUT.focus()
 }
 
 // Public Methods

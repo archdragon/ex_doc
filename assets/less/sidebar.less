@@ -265,6 +265,26 @@
       }
     }
   }
+
+  .sidebar-autocomplete {
+    position: relative;
+    height: 0px;
+    overflow: visible;
+    width: 100%;
+  }
+
+  .sidebar-autocompleteResults {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .sidebar-autocompleteResult {
+    &:hover {
+      background-color: #fff;
+    }
+  }
 }
 
 @media screen and (max-height: 500px) {

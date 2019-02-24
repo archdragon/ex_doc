@@ -39,10 +39,20 @@ function toggleNightMode () {
 // Public Methods
 // --------------
 
+export {toggleNightMode}
+
 export function initialize () {
   checkForNightMode()
 
   nightModeToggle.click(function () {
     toggleNightMode()
   })
+
+  /*
+  $(document).on('keydown', function (e) {
+    if (e.keyCode === 78) {
+      toggleNightMode()
+    }
+  })
+  */
 }
