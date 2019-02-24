@@ -74,7 +74,7 @@ function setDefaultSidebarState () {
 // Public Methods
 // --------------
 
-export {breakpoint, closeSidebar, toggleSidebar}
+export {breakpoint, closeSidebar, openSidebar, toggleSidebar}
 
 export function initialize () {
   setDefaultSidebarState()

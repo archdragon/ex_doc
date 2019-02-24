@@ -31,9 +31,9 @@
     <input name="q" type="text" id="search-list" class="search-input" placeholder="Search" aria-label="Search" autocomplete="off" />
   </form>
 
-  <div class="sidebar-autocomplete">
-    <div class="sidebar-acutocompleteResults">
-      <div class="sidebar-autocompleteResult">
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+      <div class="autocomplete-result">
         <strong>Name</strong>
         <div>Allows for y and z</div>
       </div>
