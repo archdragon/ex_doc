@@ -1,10 +1,10 @@
 <div class="autocomplete-results">
-  <div class="autocomplete-result">
-    <div class="title">Search for <strong>{{{term}}}</strong>...</div>
+  <div class="autocomplete-result" data-index="-1">
+    <div class="title">Search for <strong>{{term}}</strong>...</div>
     <div class="description">Search the docs</div>
   </div>
   {{#each results}}
-    <div class="autocomplete-result">
+    <div class="autocomplete-result" data-index="{{@index}}">
       <div class="title">{{{title}}}</div>
       <div class="description">{{{doc}}}</div>
     </div>

@@ -123,10 +123,29 @@ function addKeyboardShortuctsListeners () {
   })
 }
 
+// TODO: Clenaup + extract
+// TODO: Add "_" and other chars allowed in elixir names
+function autocompleteSanitize(text) {
+  return text.replace(/[^A-Za-z0-9.]+/g, '')
+}
+
 function updateSuggestions(term) {
-  var results = contentsJSON.filter(function (item) {
-    return item.title.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
-  }).slice(0, 5)
+  var results = contentsJSON
+    .filter(function (item) {
+      return item.title.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
+    })
+    .slice(0, 5)
+    .map(function (item) {
+      var sanitizedTerm = autocompleteSanitize(term)
+      var regexp = new RegExp(`(${ sanitizedTerm })`, 'i')
+      var title = item.title.replace(regexp, '<strong class="autocomplete-foundFragment">$1</strong>')
+
+      var resultItem = {
+        title: title,
+        doc: item.doc
+      }
+      return resultItem
+    })
 
   var template = autocompleteResultsTemplate({
     results: results,
@@ -152,6 +171,24 @@ function updateAutocomplete (searchTerm) {
   }
 }
 
+function autocompleteMoveSelection (direction) {
+  var currentlySelectedElement = $('.autocomplete-result.selected')
+  var indexToSelect = -1
+  if (currentlySelectedElement.length) {
+     indexToSelect = parseInt(currentlySelectedElement.attr('data-index')) + direction
+  }
+
+  var elementToSelect = $(`.autocomplete-result[data-index="${ indexToSelect }"]`)
+
+  if (!elementToSelect.length) {
+    elementToSelect = $('.autocomplete-result:first')
+  }
+
+  $('.autocomplete-result').each(function () {
+    $(this).toggleClass('selected', $(this).is(elementToSelect))
+  });
+}
+
 function addEventListeners () {
   SIDEBAR_NAV.on('click', '#extras-list', createHandler('extras'))
   SIDEBAR_NAV.on('click', '#modules-list', createHandler('modules'))
@@ -166,11 +203,19 @@ function addEventListeners () {
     } else if ((event.metaKey || event.ctrlKey) && e.keyCode === 13) { // cmd+enter
       $(this).parent().attr('target', '_blank').submit().removeAttr('')
       e.preventDefault()
+    } else if (e.keyCode === 38) {
+      autocompleteMoveSelection(-1)
+      e.preventDefault()
+    } else if (e.keyCode === 40) {
+      autocompleteMoveSelection(1)
+      e.preventDefault()
     }
   })
 
   $('.sidebar-search input').on('keyup', function (e) {
-    updateAutocomplete($(this).val())
+    if (e.keyCode !== 38 && e.keyCode !== 40) {
+      updateAutocomplete($(this).val())
+    }
   })
 
   var pathname = window.location.pathname

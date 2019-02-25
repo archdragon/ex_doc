@@ -9,7 +9,7 @@
 .autocomplete-results {
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.25);
   border-top: 1px solid @mediumGray;
-  background-color: @darkGray;
+  background-color: darken(@darkGray, 11%);
   left: 0;
   position: absolute;
   top: -19px;
@@ -18,17 +18,17 @@
 }
 
 .autocomplete-result {
-  border-color: darken(@mediumGray, 10%);
-  border-style: solid;
-  border-width: 0 1px 1px 1px;
-  padding: 8px 9px;
+  padding: 10px;
+  border-left: 3px solid transparent;
 
-  &:hover {
-    background-color: #fff;
+  &:hover, &.selected {
+    background-color: darken(@darkGray, 7%);
+    border-left: 3px solid @purple;
   }
 
   .description {
-    opacity: 0.65;
+    opacity: 0.6;
+    padding-top: 3px;
   }
 
   .title,
@@ -38,4 +38,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.autocomplete-foundFragment {
+  color: @white;
 }
