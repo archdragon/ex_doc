@@ -30,6 +30,25 @@ module.exports = {
         }
       },
       {
+        test: /\.(woff)$/,
+        loader: 'url-loader',
+        options: {
+          mimetype: 'application/font-woff'
+        }
+      },
+      {
+        test: /\.(eot|svg|ttf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'html/fonts/'
+            }
+          }
+        ]
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
@@ -43,18 +62,6 @@ module.exports = {
       {
         test: /\.less$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
-      },
-      {
-        test: /\.(eot|svg|ttf|woff)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'html/fonts/'
-            }
-          }
-        ]
       }
     ]
   }
